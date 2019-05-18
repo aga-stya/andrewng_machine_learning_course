@@ -75,14 +75,8 @@ y = eye(num_labels)(y,:);
 
 J = (-1 / m) * sum(sum(y.*log(a3) + (1 - y).*log(1 - a3)));
 
-%Theta1 = [zeros(size(Theta1, 1), 1) Theta1(:,2:end)];
-%Theta2 = [zeros(size(Theta2, 1), 1) Theta2(:,2:end)];
-
 Theta1_tmp = Theta1(:,2:end);
 Theta2_tmp = Theta2(:,2:end);
-
-%size(Theta1)
-%size(Theta2)
 
 tmp1 = sum(sum(Theta1_tmp .* Theta1_tmp));
 size(tmp1);
@@ -110,16 +104,17 @@ d2 = (d3 * Theta2_tmp) .* (sigmoidGradient (z_2));
 D1 = d2' * a_1;%25x401
 D2 = d3' * a_2;%10x26
 
+%Step 5
 
-%z_2 = 
 
+%Regularization of grad
 
+Theta1_grad = D1/m + (lambda/m)*[zeros(hidden_layer_size,1) Theta1(:,2:end)];
+Theta2_grad = D2/m + (lambda/m)*[zeros(num_labels,1) Theta2(:,2:end)];
 % -------------------------------------------------------------
 
 % =========================================================================
 
-Theta1_grad = D1/m;
-Theta2_grad = D2/m;
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
