@@ -78,33 +78,48 @@ J = (-1 / m) * sum(sum(y.*log(a3) + (1 - y).*log(1 - a3)));
 %Theta1 = [zeros(size(Theta1, 1), 1) Theta1(:,2:end)];
 %Theta2 = [zeros(size(Theta2, 1), 1) Theta2(:,2:end)];
 
-Theta1 = Theta1(:,2:end);
-Theta2 = Theta2(:,2:end);
+Theta1_tmp = Theta1(:,2:end);
+Theta2_tmp = Theta2(:,2:end);
 
 %size(Theta1)
 %size(Theta2)
 
-tmp1 = sum(sum(Theta1 .* Theta1));
-size(tmp1)
+tmp1 = sum(sum(Theta1_tmp .* Theta1_tmp));
+size(tmp1);
 
-tmp2 = sum(sum(Theta2 .* Theta2));
-size(tmp2)
+tmp2 = sum(sum(Theta2_tmp .* Theta2_tmp));
+size(tmp2);
 
 J = J + (lambda/(2*m)) * (tmp1 + tmp2);
 
+%Step 1
+a_1 = X; %Input layer 1
+z_2 = X * Theta1';
+a_2 = sigmoid (z_2); %layer2 activation units calculation
+a_2 = [ones(size(a_2, 1), 1) a_2];
+z_3 = a_2 * Theta2';
+a_3 = sigmoid (z_3); %output layer  or layer 2 (5000x10)
+
+%Step 2
+d3 = a_3 - y;
+
+%Step 3
+d2 = (d3 * Theta2_tmp) .* (sigmoidGradient (z_2));
+
+%Step 4
+D1 = d2' * a_1;%25x401
+D2 = d3' * a_2;%10x26
 
 
-
-
-
-
-
+%z_2 = 
 
 
 % -------------------------------------------------------------
 
 % =========================================================================
 
+Theta1_grad = D1/m;
+Theta2_grad = D2/m;
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
